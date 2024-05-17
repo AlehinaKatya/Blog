@@ -1,19 +1,17 @@
 package org.example.blog.repository.impl;
 
-import org.example.blog.entities.User;
-import org.example.blog.repository.UserRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.example.blog.entities.User;
+import org.example.blog.repository.UserRepository;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UserRepositoryImplTest {
     @Mock
     private UserRepository userRepository;

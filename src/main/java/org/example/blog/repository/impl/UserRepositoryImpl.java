@@ -1,11 +1,5 @@
 package org.example.blog.repository.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.example.blog.DatabaseConnection;
-import org.example.blog.entities.User;
-import org.example.blog.repository.UserRepository;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,21 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.example.blog.DatabaseConnection;
+import org.example.blog.entities.User;
+import org.example.blog.repository.UserRepository;
+
 public class UserRepositoryImpl implements UserRepository {
-    private final Connection connection;
+    private final DatabaseConnection databaseConnection;
     private static final Logger logger = LogManager.getLogger(UserRepository.class);
 
     public UserRepositoryImpl(DatabaseConnection datebaseConnection) {
-        connection = datebaseConnection.getConnection();
+        databaseConnection = datebaseConnection;
     }
 
     @Override
     public User findById(Long Id) {
+
         logger.info("Вызвана функция findById UserRepository.");
         User user = null;
         String userQuery = "SELECT id, name, email, password" +
                 " FROM users WHERE id = ?";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
 
             preparedStatement.setLong(1, Id);
@@ -54,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
         List<User> userList = new ArrayList<>();
         String userQuery = "SELECT id, name, email, password" +
                 " FROM users";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -80,7 +81,7 @@ public class UserRepositoryImpl implements UserRepository {
         User user = null;
         String userQuery = "SELECT id, name, email, password" +
                 " FROM users WHERE name = ?";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
 
             preparedStatement.setString(1, name);
@@ -106,7 +107,7 @@ public class UserRepositoryImpl implements UserRepository {
         logger.info("Вызвана функция save UserRepository.");
         String userQuery = "INSERT INTO users(name, email, password)"
                 + "VALUES(?, ?, ?)";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
 
             preparedStatement.setString(1, user.getName());
@@ -130,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
                         + "email = ?,"
                         + "password = ? "
                         + "WHERE id = ?";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
 
             preparedStatement.setString(1, user.getName());
@@ -149,7 +150,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void delete(User user) {
         logger.info("Вызвана функция delete UserRepository.");
         String userQuery = "DELETE FROM users WHERE name = ?";
-        try {
+        try (Connection connection = this.databaseConnection.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(userQuery);
             preparedStatement.setString(1, user.getName());
             preparedStatement.executeUpdate();

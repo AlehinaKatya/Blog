@@ -4,23 +4,27 @@ import org.example.blog.dto.UserDto;
 import org.example.blog.entities.User;
 import org.example.blog.mapper.UserMapper;
 import org.example.blog.repository.impl.UserRepositoryImpl;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
     @Mock
-    private UserRepositoryImpl userRepository;
+    UserRepositoryImpl userRepository;
 
     @InjectMocks
-    private UserServiceImpl userService;
+    UserServiceImpl userService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this); //TODO сделать нормальную обработку автоклозабл
+    }
 
     @Test
     public void testGetUserById() {
